@@ -1,7 +1,6 @@
 """ Supposed to communicate with the server """
 
 
-def get_distance(JSON_file):
-    
-    return 10
+def calculation(distance):
+    return distance * 123
 
