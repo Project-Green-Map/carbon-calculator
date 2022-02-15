@@ -1,11 +1,7 @@
-from openpyxl import load_workbook
 import pandas
 all_data = {}
 
 def extract_data(): 
-    workbook = load_workbook(filename="CO2_data.xlsx")
-    spreadsheet = workbook.active
-
     ### Extracting car data 
     car_dataframe = pandas.read_excel(io="CO2_data.xlsx", sheet_name="Cars")
 
