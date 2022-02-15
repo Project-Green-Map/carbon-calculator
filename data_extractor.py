@@ -7,7 +7,7 @@ def extract_data():
     spreadsheet = workbook.active
 
     ### Extracting car data 
-    car_dataframe = pandas.read_excel(io="C:/Users/Horea/Project_Green_Maps_CO2_CalculatorProject_Green_Maps_CO2_Calculator/carbon-calculator/CO2_data.xlsx", sheet_name="Cars")
+    car_dataframe = pandas.read_excel(io="CO2_data.xlsx", sheet_name="Cars")
 
     car = {}
     for i in range(1,9,2):
@@ -19,7 +19,7 @@ def extract_data():
     all_data["car"] = car
 
     ### Extracting public transport data 
-    public_transport_dataframe =  pandas.read_excel(io="C:/Users/Horea/Project_Green_Maps_CO2_CalculatorProject_Green_Maps_CO2_Calculator/carbon-calculator/CO2_data.xlsx", sheet_name="Public_transport")
+    public_transport_dataframe =  pandas.read_excel(io="CO2_data.xlsx", sheet_name="Public_transport")
 
    
     public_transport = {}
@@ -39,6 +39,6 @@ def get_public_transport_value(transport_type):
 
 def get_cycling_value():
     return all_data["cycling"]
-    
+
 extract_data()
 print(get_car_value("car","Average car","Diesel"))
