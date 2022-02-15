@@ -1,7 +1,5 @@
-from calculator import calculation
-from enum import Enum
+from json_reader import extract_distances
     
-
 def main(request):
     """Responds to any HTTP request.
     Args:
@@ -14,13 +12,13 @@ def main(request):
     request_json = request.get_json()
     if request_json:
         # here we want to write stuff, request_json is just the dictionary representing the json
-
-        if "distance" not in request_json:
-            return "sorry, can't do a calculation"
-
-        #d = request_json["distance"]
-        
-        return 2 #str(calculation(d))
+        return main_json(request_json)
     else:
         return f'We have a problem - no json received'
 
+
+def main_json(json):
+    magic_constant_per_km = 3.5
+    distances = extract_distances(json)
+    distances = [d * magic_constant_per_km for d in distances]
+    return str(distances)
