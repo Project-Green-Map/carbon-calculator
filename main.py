@@ -1,4 +1,6 @@
+from numpy import extract
 from calculator import car_calculation
+from data_extractor import extract_data
 from json_reader import extract_distances
     
 def main(request):
@@ -19,7 +21,7 @@ def main(request):
 
 
 def main_json(json):
-    magic_constant_per_km = 3.5
+    extract_data()
     distances = extract_distances(json)
     distances = [car_calculation(d, "Average car", "Diesel") for d in distances]
     return str(distances)

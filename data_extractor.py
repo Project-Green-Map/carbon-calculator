@@ -31,7 +31,7 @@ def extract_data():
     all_data["cycling"] = 0.005
     print(all_data)
 
-def get_car_value(transport_type, car_type, fuel_type):
+def get_car_value(car_type, fuel_type):
     return all_data["car"][car_type][fuel_type]
 
 def get_public_transport_value(transport_type):
@@ -39,6 +39,3 @@ def get_public_transport_value(transport_type):
 
 def get_cycling_value():
     return all_data["cycling"]
-
-extract_data()
-print(get_car_value("car","Average car","Diesel"))
