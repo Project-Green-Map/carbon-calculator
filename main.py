@@ -2,8 +2,11 @@ from numpy import extract
 from calculator import car_calculation
 from data_extractor import extract_data
 from json_reader import extract_distances
-    
-def main(request):
+
+import functions_framework
+
+@functions_framework.http
+def mr_carbon(request):
     """Responds to any HTTP request.
     Args:
         request (flask.Request): HTTP request object.
@@ -25,3 +28,4 @@ def main_json(json):
     distances = extract_distances(json)
     distances = [car_calculation(d, "Average car", "Diesel") for d in distances]
     return str(distances)
+

@@ -1,2 +1,6 @@
 # Function dependencies, for example:
-# package>=version
+numpy>=1.22.0
+pandas>=1.4.0
+flask==2.*
+functions-framework==3.*
+openpyxl
