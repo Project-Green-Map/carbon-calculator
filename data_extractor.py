@@ -1,6 +1,10 @@
 import pandas
 all_data = {}
 
+class Defaults:
+    public_transport_default = 1
+    average_car_default = 2
+
 def extract_data(): 
     ### Extracting car data 
     car_dataframe = pandas.read_excel(io="CO2_data.xlsx", sheet_name="Cars")
@@ -8,9 +12,10 @@ def extract_data():
     car = {}
     for i in range(1,9,2):
         fuels = {}
-        fuels["Diesel"] = car_dataframe.loc[i,"Diesel"]
-        fuels["Petrol"] = car_dataframe.loc[i,"Petrol"]
-        fuels["Hybrid"] = car_dataframe.loc[i,"Hybrid"]
+        fuels["diesel"] = car_dataframe.loc[i,"diesel"]
+        fuels["petrol"] = car_dataframe.loc[i,"petrol"]
+        fuels["hybrid"] = car_dataframe.loc[i,"hybrid"]
+        fuels["unknow"] = car_dataframe.loc[i,"unknown"]
         car[car_dataframe.iloc[i,1]] = fuels
     all_data["car"] = car
 
@@ -28,7 +33,14 @@ def extract_data():
     print(all_data)
 
 def get_car_value(car_type, fuel_type):
-    return all_data["car"][car_type][fuel_type]
+    if(car_type in all_data["car"]):
+        if(fuel_type in all_data["car"][car_type]):
+            return all_data["car"][car_type][fuel_type]
+        else:
+            print("DANGER")
+            return all_data["car"][car_type]["diesel"]
+    else:
+        return -1
 
 def get_public_transport_value(transport_type):
     return all_data["public_transport"][transport_type]
