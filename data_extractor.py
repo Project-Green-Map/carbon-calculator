@@ -29,7 +29,7 @@ def extract_data():
     all_data["public_transport"] = public_transport
 
     all_data["walinkg"] = 0
-    all_data["cycling"] = 0.005
+    all_data["cycling"] = 0.000001
     print(all_data)
 
 def get_car_value(car_type, fuel_type):
