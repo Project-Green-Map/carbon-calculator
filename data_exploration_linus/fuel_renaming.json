@@ -1,0 +1,12 @@
+{
+    "PETROL": "PETROL",
+    "DIESEL": "DIESEL",
+    "ELECTRIC": "ELECTRIC",
+    "LPG": "LPG",
+    "PETROL/ELECTRIC": "HYBRID",
+    "E85": "E85",
+    "NG": "NG",
+    "DIESEL/ELECTRIC": "HYBRID",
+    "NG-BIOMETHANE": "NG-BIOMETHANE",
+    "UNKNOWN": "UNKNOWN"
+}
