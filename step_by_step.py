@@ -1,3 +1,4 @@
+from distutils.log import error
 import string
 from typing import List
 from numpy import full_like, argmin, absolute
@@ -43,9 +44,10 @@ class SimpleStepByStep(StepByStepInterface):
     def _reset_state(self):
         self.co2e_per_km: float = 170.0
     
-    def __init__(self, dataframe):
+    def __init__(self, dataframe, defaults):
         self._reset_state()
         self._df = dataframe
+        self._default = defaults
 
     def per_step(self, google_step) -> float:
         distance = google_step['']['value']
@@ -60,17 +62,25 @@ class SimpleStepByStep(StepByStepInterface):
         brand = string.strip(string.upper(vehicle_info.brand))
         model = string.strip(string.upper(vehicle_info.model))
         fuel  = string.strip(string.upper(vehicle_info.fuel))
+        size  = string.strip(string.upper(vehicle_info.size))
         year  = vehicle_info.year
 
-        if brand not in self._df['Make'].unique():
-            print(f"[Vehicle Info: /] Unable to find brand {brand}")
+        ## No brand or model added by user -> use defaults
+        if brand == "" or model == "":
+            self.co2e_per_km = self._default[size][fuel]
             return
+
+        if brand not in self._df['Make'].unique():
+            raise error("NO BRAND FOUND!")
+            #print(f"[Vehicle Info: /] Unable to find brand {brand}")
+            #return
         
         brand_df = self._df.loc[self._df['Make']==brand]
         
         if model not in brand_df['Model'].unique():
-            print(f"[Vehicle Info: /{brand}] Unable to find model {model}")
-            return
+            raise error("NO MODEL FOUND!")
+            #print(f"[Vehicle Info: /{brand}] Unable to find model {model}")
+            #return
         
         model_df = brand_df.loc[brand_df['Mode']==model]
 

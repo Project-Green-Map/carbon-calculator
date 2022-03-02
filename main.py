@@ -1,13 +1,13 @@
 from data_extractor import extract_data
 from json_reader import compute_route_consumption
 
-#import functions_framework
+import functions_framework
 
 class Vehicle_Info:
     model = "average"
     fuel = "unkown"
 
-'''
+
 @functions_framework.http
 def mr_carbon(request):
     """Responds to any HTTP request.
@@ -24,7 +24,7 @@ def mr_carbon(request):
         return main_json(request_json)
     else:
         return f'We have a problem - no json received'
-'''
+
 
 def main_json(json):
     extract_data()
