@@ -4,7 +4,7 @@ from numpy import argmin
 
 folder_path = Path("carbon_db") #using Path to make sure it is compatible among different OS.
 
-def main(brand, model, fuel, year):
+def read_db(brand, model, fuel, year):
     co2e_g_per_km = 0
     file_path = folder_path / (brand + ".json")
     if not file_path.is_file():
@@ -24,19 +24,16 @@ def main(brand, model, fuel, year):
             fuel = "DIESEL"
         else:
             fuel = list(brand_dict[model].keys())[0] #we just take what is available
-        print(f"[Vehicle Info: /{brand}/{model}/{fuel}] Subs: {fuel} <- {old_fuel}")
+        print(f"[Vehicle Info: /{brand}/{model}/{fuel}] {fuel} <- {old_fuel}")
 
     available_years = list(brand_dict[model][fuel].keys())
-    if year not in available_years:
+    if str(year) not in available_years:
         _minarg = argmin([abs(int(y)-year) for y in available_years])
         closest_year = available_years[_minarg]
-        print(f"[Vehicle Info: /{brand}/{model}/{fuel}] Subs {closest_year} <- {year}")
+        print(f"[Vehicle Info: /{brand}/{model}/{fuel}] {closest_year} <- {year}")
         co2e_g_per_km = brand_dict[model][fuel][closest_year]
     else:
         co2e_g_per_km = brand_dict[model][fuel][year]
 
-    print("[Vehicle Info: /{brand}/{model}/{fuel}/{year}] Emission/km: {co2e_g_per_km}")
+    print(f"[Vehicle Info: /{brand}/{model}/{fuel}/{year}] Emission/km: {co2e_g_per_km}")
     return co2e_g_per_km
-
-#random test
-print(main('AUDI', 'A1', 'Not recognised fuel', 2010))

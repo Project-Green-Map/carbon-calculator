@@ -1,5 +1,4 @@
 from enum import Enum
-from tkinter import E
 
 from calculator import car_calculation, cycling_calculation, public_transport_calculation
 
