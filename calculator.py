@@ -1,7 +1,5 @@
 """ Supposed to communicate with the server """
 
-
-from math import dist
 from data_extractor import get_car_value, get_cycling_value, get_public_transport_value
 
 

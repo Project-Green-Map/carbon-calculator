@@ -1,0 +1,30 @@
+{
+    "SMALL": {
+        "DIESEL":   137.58,
+        "PETROL":   149.96,
+        "HYBRID":   104.94,
+        "UNKNOWN":  145.49,
+        "ELECTRIC": 0.0    
+    },
+    "MEDIUM": {
+        "DIESEL":   164.96,
+        "PETROL":   187.85,
+        "HYBRID":   109.57,
+        "UNKNOWN":  175.62,
+        "ELECTRIC": 0.0    
+    },
+    "LARGE": {
+        "DIESEL":   207.21,
+        "PETROL":   279.09,
+        "HYBRID":   151.51,
+        "UNKNOWN":  225.97,
+        "ELECTRIC": 0.0    
+    },
+    "AVERAGE": {
+        "DIESEL":   168.43,
+        "PETROL":   174.31,
+        "HYBRID":   119.52,
+        "UNKNOWN":  171.48,
+        "ELECTRIC": 0.0    
+    }
+}

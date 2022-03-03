@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 from distutils.log import error
 import string
+=======
+>>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
 from typing import List
-from numpy import full_like, argmin, absolute
+from warnings import warn
 
-from main import Vehicle_Info
 from speed_mul import * 
+from get_co2e import read_db
+from get_fallback import read_fallback_values
+from get_transit import get_bus_emission, get_rail_emission
 
 
 # Interface for a step-by-step-caculator class
@@ -16,9 +21,8 @@ class StepByStepInterface:
     def process_vehicle_info(self, vehicle_info):
         pass
     
-    def calculate(self, google_routes, vehicle_info) -> float:
+    def calculate(self, google_routes, vehicle_info, verbose=True) -> float:
         self.process_vehicle_info(vehicle_info)
-        routes = google_route['routes']
 
         # potential future optimisation:
         # legs = [r['legs'] for r in routes] # [[[R1L1] [R1L2]] []]
@@ -26,15 +30,17 @@ class StepByStepInterface:
         
         carbon_by_route: List[float] = []
 
-        for nr, r in enumerate(routes):
+        for nr, r in enumerate(google_routes):
             legs = r['legs']
             carbon_by_leg = []
             for nl, l in enumerate(legs):
-                steps = l['step']
+                steps = l['steps']
                 carbon_by_step = [self.per_step(s) for s in steps]
-                print(f"R{nr}L{nl}: {carbon_by_step}")
-                carbon_by_leg.append(carbon_by_step)
-            print(f"R{nr} {carbon_by_leg}")
+                if verbose:
+                    print(f"R{nr}L{nl}: {carbon_by_step}")
+                carbon_by_leg.append(sum(carbon_by_step))
+            if verbose:
+                print(f"R{nr} {carbon_by_leg}")
             carbon_by_route.append(sum(carbon_by_leg))
         
         return carbon_by_route
@@ -43,20 +49,30 @@ class StepByStepInterface:
 class SimpleStepByStep(StepByStepInterface):
     def _reset_state(self):
         self.co2e_per_km: float = 170.0
+        self.good_vehicle_info: bool = True
     
+<<<<<<< HEAD
     def __init__(self, dataframe, defaults):
         self._reset_state()
         self._df = dataframe
         self._default = defaults
+=======
+    def __init__(self):
+        self._reset_state()
+>>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
 
-    def per_step(self, google_step) -> float:
-        distance = google_step['']['value']
+    def _per_step_driving(self, google_step) -> float:
+        if not self.good_vehicle_info:
+            warn("[Vehicle Info: ] Calculating driving carbon with no vehicle data, probably a horrible idea!")
+
+        distance = google_step['distance']['value']
         time = google_step['duration']['value']
         mps = distance / time
         kmh = mps * 3.6
         
         return distance / 1000.0 * self.co2e_per_km * get_multiplier(kmh)
 
+<<<<<<< HEAD
     def process_vehicle_info(self, vehicle_info):
         self._reset_state()
         brand = string.strip(string.upper(vehicle_info.brand))
@@ -74,33 +90,76 @@ class SimpleStepByStep(StepByStepInterface):
             raise error("NO BRAND FOUND!")
             #print(f"[Vehicle Info: /] Unable to find brand {brand}")
             #return
+=======
+
+    def _per_step_transit(self, google_step) -> float:
+        distance_km = google_step['distance']['value'] / 1000
+
+        details = google_step['transit_details'] # this should exist, DirectionsTransitDetails 
+        if "line" not in details.keys():
+            warn("[Vehicle Info: transit] Skipped step: missing `line` in DirectionsTransitDetails")
+            return 0.0
+>>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
         
-        brand_df = self._df.loc[self._df['Make']==brand]
+        line = details['line'] #DirectionsTransitLine
+        if "vehicle" not in line.keys():
+            warn("[Vehicle Info: transit] Skipped step: missing `vehicle` in DirectionsTransitLine")
+            return 0.0
         
+<<<<<<< HEAD
         if model not in brand_df['Model'].unique():
             raise error("NO MODEL FOUND!")
             #print(f"[Vehicle Info: /{brand}] Unable to find model {model}")
             #return
-        
-        model_df = brand_df.loc[brand_df['Mode']==model]
-
-        if fuel not in model_df['Fuel'].unique():
-            print(f"[Vehicle Info: /{brand}/{model}] Unable to find fuel {fuel}")
-            return
-        
-        fuel_df = model_df.loc[model_df['Fuel']==fuel]
-
-
-        available_years = list(fuel_df['year'].unique())
-        if year not in available_years:
-            _minarg = argmin([abs(y-year) for y in available_years])
-            closest_year = available_years[_minarg]
-            print("[Vehicle Info: /{brand}/{model}/{fuel}] Subs {closest_year} <- {year}")
-            self.co2e_per_km = fuel_df.loc[fuel_df['year']==closest_year]['Emission'].iloc[0]
+=======
+        vehicle = line['vehicle'] #DirectionsTransitVehicle 
+        if vehicle['type'] in ['BUS', 'INTERCITY_BUS']:
+            return get_bus_emission() * distance_km
         else:
-            self.co2e_per_km = fuel_df.loc[fuel_df['year']==year]['Emission'].iloc[0]
+            return get_rail_emission() * distance_km
+    
+
+    def per_step(self, google_step) -> float:
+        if google_step["travel_mode"] == "DRIVING":
+            return self._per_step_driving(google_step)
+        elif google_step["travel_mode"] == "TRANSIT":
+            return self._per_step_transit(google_step)
+        else:
+            return 0.0 # walking, cycling
+
+
+    def process_vehicle_info(self, vehicle_info):
+        self._reset_state()
+
+        if "brand" in vehicle_info.keys() and "model" in vehicle_info.keys():
+            brand = vehicle_info["brand"].strip().upper()
+            model = vehicle_info["model"].strip().upper()
+            fuel  = vehicle_info["fuel"].strip().upper() if "fuel" in vehicle_info.keys() else "UNKNOWN"
+            year  = vehicle_info["year"] if "year" in vehicle_info.keys() else 2022
+
+            try:
+                self.co2e_per_km: float = read_db(brand=brand, model=model, fuel=fuel, year=year)
+                return
+            except Exception as e:
+                print("[Vehicle Info: ] Missing " + str(e))
+>>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
         
-        print("[Vehicle Info: /{brand}/{model}/{fuel}/{year}] Emission/km: {self.co2e_per_km}")
+
+        # Do fall back calculation here
+        if "size" not in vehicle_info.keys():
+            print("[Vehicle Info: ] Incomplete vehicle_info, using default value!")
+            self.good_vehicle_info = False
+            return
+               
+        size = vehicle_info["size"] if "size" in vehicle_info.keys() else ""
+        fuel = vehicle_info["fuel"] if "fuel" in vehicle_info.keys() else ""
+        print(f"[Vehicle Info: ] Fallback used: ({size}, {fuel})")
+        self.co2e_per_km = read_fallback_values(size, fuel)
+        
+
+            
+
+        
         
 
 

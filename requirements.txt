@@ -4,3 +4,5 @@ pandas>=1.4.0
 flask==2.*
 functions-framework==3.*
 openpyxl
+pathlib
+json
