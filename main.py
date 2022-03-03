@@ -5,10 +5,6 @@ import time
 
 from step_by_step import SimpleStepByStep
 
-<<<<<<< HEAD
-import functions_framework
-=======
->>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
 
 class Vehicle_Info:
     model = "average"
@@ -42,32 +38,5 @@ def mr_carbon(request):
         print()
         return  str(consumptions)
     else:
-<<<<<<< HEAD
-        return f'We have a problem - no json received'
-
-=======
         return  'We have a problem - no POST json received'
     
->>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
-
-"""
-def main_json(json):
-    extract_data()
-    consumptions = [compute_route_consumption(route,vehicle_info) for route in routes]
-    return str(consumptions)
-
-def initialize_vehicle_info(json):
-    vehicle_info = Vehicle_Info()
-    ### MODEL
-    if("brand" in json.keys() and "model" in json.keys()):
-        vehicle_info.model = json["brand"] + ' ' + json['model']
-    else:
-        if("size" in json.keys()):
-           vehicle_info.model = json["size"]
-        
-    ### FUEL
-    if("fuel" in json.keys()):
-        vehicle_info.fuel = json["fuel"] 
-    
-    return vehicle_info
-"""

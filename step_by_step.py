@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from distutils.log import error
-import string
-=======
->>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
 from typing import List
 from warnings import warn
 
@@ -51,15 +46,8 @@ class SimpleStepByStep(StepByStepInterface):
         self.co2e_per_km: float = 170.0
         self.good_vehicle_info: bool = True
     
-<<<<<<< HEAD
-    def __init__(self, dataframe, defaults):
-        self._reset_state()
-        self._df = dataframe
-        self._default = defaults
-=======
     def __init__(self):
         self._reset_state()
->>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
 
     def _per_step_driving(self, google_step) -> float:
         if not self.good_vehicle_info:
@@ -72,25 +60,6 @@ class SimpleStepByStep(StepByStepInterface):
         
         return distance / 1000.0 * self.co2e_per_km * get_multiplier(kmh)
 
-<<<<<<< HEAD
-    def process_vehicle_info(self, vehicle_info):
-        self._reset_state()
-        brand = string.strip(string.upper(vehicle_info.brand))
-        model = string.strip(string.upper(vehicle_info.model))
-        fuel  = string.strip(string.upper(vehicle_info.fuel))
-        size  = string.strip(string.upper(vehicle_info.size))
-        year  = vehicle_info.year
-
-        ## No brand or model added by user -> use defaults
-        if brand == "" or model == "":
-            self.co2e_per_km = self._default[size][fuel]
-            return
-
-        if brand not in self._df['Make'].unique():
-            raise error("NO BRAND FOUND!")
-            #print(f"[Vehicle Info: /] Unable to find brand {brand}")
-            #return
-=======
 
     def _per_step_transit(self, google_step) -> float:
         distance_km = google_step['distance']['value'] / 1000
@@ -99,19 +68,12 @@ class SimpleStepByStep(StepByStepInterface):
         if "line" not in details.keys():
             warn("[Vehicle Info: transit] Skipped step: missing `line` in DirectionsTransitDetails")
             return 0.0
->>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
         
         line = details['line'] #DirectionsTransitLine
         if "vehicle" not in line.keys():
             warn("[Vehicle Info: transit] Skipped step: missing `vehicle` in DirectionsTransitLine")
             return 0.0
         
-<<<<<<< HEAD
-        if model not in brand_df['Model'].unique():
-            raise error("NO MODEL FOUND!")
-            #print(f"[Vehicle Info: /{brand}] Unable to find model {model}")
-            #return
-=======
         vehicle = line['vehicle'] #DirectionsTransitVehicle 
         if vehicle['type'] in ['BUS', 'INTERCITY_BUS']:
             return get_bus_emission() * distance_km
@@ -142,7 +104,6 @@ class SimpleStepByStep(StepByStepInterface):
                 return
             except Exception as e:
                 print("[Vehicle Info: ] Missing " + str(e))
->>>>>>> 69dbd8cf476e1e32af47daec3cdb400742725360
         
 
         # Do fall back calculation here
