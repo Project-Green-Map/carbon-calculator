@@ -28,7 +28,7 @@ def mr_carbon(request):
     request_json = request.get_json()
 
     if request_json:
-        start = time.clock_gettime_ns(time.CLOCK_MONOTONIC)
+        start = time.time_ns()
         print("========= Processing request =========")
         routes = request_json["routes"]
         vehicle_info = request_json["vehicle_info"] if "vehicle_info" in request_json.keys() else {}
@@ -36,7 +36,7 @@ def mr_carbon(request):
         sbs_calc = SimpleStepByStep()
         consumptions = sbs_calc.calculate(google_routes=routes, vehicle_info=vehicle_info, verbose=False)
         print(consumptions)
-        end = time.clock_gettime_ns(time.CLOCK_MONOTONIC)
+        end = time.time_ns()
         elapse_ms = (end-start) * 1e-6
         print(f"===== End of request ({elapse_ms: .4f}ms) =====")
         print()
