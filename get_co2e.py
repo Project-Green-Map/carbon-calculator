@@ -27,7 +27,7 @@ def read_db(brand, model, fuel, year):
         print(f"[Vehicle Info: /{brand}/{model}/{fuel}] {fuel} <- {old_fuel}")
 
     available_years = list(brand_dict[model][fuel].keys())
-    if str(year) not in available_years:
+    if year not in available_years:
         _minarg = argmin([abs(int(y)-year) for y in available_years])
         closest_year = available_years[_minarg]
         print(f"[Vehicle Info: /{brand}/{model}/{fuel}] {closest_year} <- {year}")

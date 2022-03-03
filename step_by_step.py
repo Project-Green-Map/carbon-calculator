@@ -1,10 +1,9 @@
 import string
 from typing import List
-from click import MissingParameter
-from numpy import full_like, argmin
 
 from speed_mul import * 
 from get_co2e import read_db
+from get_fallback import read_fallback_values
 
 
 # Interface for a step-by-step-caculator class
@@ -44,6 +43,7 @@ class StepByStepInterface:
 class SimpleStepByStep(StepByStepInterface):
     def _reset_state(self):
         self.co2e_per_km: float = 170.0
+        self.good_vehicle_info: bool = True
     
     def __init__(self):
         self._reset_state()
@@ -73,8 +73,18 @@ class SimpleStepByStep(StepByStepInterface):
                 print("[Vehicle Info: ] Missing " + str(e))
         
 
-        # TODO: Need to do fall back calculation here       
-        return
+        # Do fall back calculation here
+        if "size" not in vehicle_info.keys():
+            print("[Vehicle Info: ] Incomplete vehicle_info, using default value! [BAD]")
+            self.good_vehicle_info = False
+            return
+               
+        size = vehicle_info["size"] if "size" in vehicle_info.keys() else ""
+        fuel = vehicle_info["fuel"] if "fuel" in vehicle_info.keys() else ""
+        print(f"[Vehicle Info: ] Fallback used: ({size}, {fuel})")
+        self.co2e_per_km = read_fallback_values(size, fuel)
+        
+
             
 
         

@@ -24,14 +24,14 @@ def mr_carbon(request):
     if request_json:
         print("Processing request")
         routes = request_json["routes"]
-        vehicle_info = request_json["vehicle_info"]
+        vehicle_info = request_json["vehicle_info"] if "vehicle_info" in request_json.keys() else {}
 
         sbs_calc = SimpleStepByStep()
         consumptions = sbs_calc.calculate(google_routes=routes, vehicle_info=vehicle_info, verbose=False)
         print(consumptions)
         return str(consumptions)
     else:
-        return f'We have a problem - no json received'
+        return 'We have a problem - no POST json received'
 
 """
 def main_json(json):
