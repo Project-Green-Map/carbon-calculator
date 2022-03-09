@@ -4,7 +4,7 @@ from json import load
 from unittest.mock import Mock
 from pathlib import Path
 
-test_folder = Path("tests")
+test_folder = Path("test_cases")
 
 def str_list_to_float_list(str_list):
     return [float(f) for f in str_list[1 : len(str_list) - 1].split(", ")]
