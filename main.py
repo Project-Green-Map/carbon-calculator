@@ -1,5 +1,3 @@
-from data_extractor import extract_data
-from json_reader import compute_route_consumption
 import functions_framework
 import time
 
