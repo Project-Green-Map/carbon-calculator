@@ -10,7 +10,7 @@ def str_list_to_float_list(str_list):
     return [float(f) for f in str_list[1 : len(str_list) - 1].split(", ")]
 
 class TestCalculation(unittest.TestCase):
-    def test_small_petrol_car(self):
+    def test_wholeRequest_smallPetrolCar(self):
         #ARRANGE
         file_path = test_folder / "test_small_petrol.json"
         file = open(file_path, "r")
@@ -27,7 +27,6 @@ class TestCalculation(unittest.TestCase):
 
         #ASSERT
         float_answers = str_list_to_float_list(answer)
-        print(float_answers)
         for i in range(len(correct_results)):
             self.assertTrue(abs(
                 float_answers[i] - correct_results[i]
