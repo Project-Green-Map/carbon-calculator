@@ -1,3 +1,8 @@
+'''
+Given a master brand_dict (also called Make_dict at some places)
+It will update any other brand_dictionaries with the updated master values.
+'''
+
 import json
 
 dict_paths = [

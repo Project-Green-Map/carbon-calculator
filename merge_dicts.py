@@ -1,3 +1,10 @@
+'''
+Given brand_dicts (also called Make_dicts at some places)
+It will produce a merged dict and printout any conflicts that
+should be resolved manually.
+'''
+
+
 import json
 
 dict_paths = [
